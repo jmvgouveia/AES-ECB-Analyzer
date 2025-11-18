@@ -111,6 +111,7 @@ class AESECBAnalyzer:
         Returns:
             Chave em bytes do tamanho correto
         """
+
         key_bytes = key_string.encode('utf-8')
         
         # Se a chave for menor, repete até o tamanho desejado
@@ -165,7 +166,7 @@ class AESECBAnalyzer:
             Lista de tuplas (chave, plaintext, tamanho_bits)
         """
         results = []
-        key_sizes = [16, 24, 32, 64]  # 128, 192, 256, 512 bits
+        key_sizes = [16, 24, 32]  # 128, 192, 256 bits
         
         print(f"\n{'='*60}")
         print("ATAQUE DE FORÇA BRUTA DIRECIONADA")
@@ -184,7 +185,7 @@ class AESECBAnalyzer:
                 if verbose and tested % 10 == 0:
                     elapsed = time.time() - start_time
                     rate = tested / elapsed if elapsed > 0 else 0
-                    print(f"Progresso: {tested}/{len(wordlist)*3} tentativas "
+                    print(f"Progresso: {tested}/{len(wordlist)*len(key_sizes)} tentativas "
                           f"({rate:.1f} chaves/seg)", end='\r')
                 
                 key = self.prepare_key(key_string, key_size)
