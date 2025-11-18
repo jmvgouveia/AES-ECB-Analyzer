@@ -1,4 +1,4 @@
-# Protótipo principal
+121# Protótipo principal
 
 #!/usr/bin/env python3
 """
@@ -28,7 +28,29 @@ class AESECBAnalyzer:
         self.ciphertext = base64.b64decode(ciphertext_b64)
         self.known_plaintext = known_plaintext
         self.block_size = 16  # AES usa blocos de 16 bytes
-        
+
+    def load_wordlist_from_file(self, filepath: str) -> List[str]:
+        """
+        Carrega uma wordlist a partir de um ficheiro
+
+        Args:
+            filepath: Caminho para o ficheiro de wordlist
+
+        Returns:
+            Lista de palavras (strings)
+        """
+        try:
+            with open(filepath, "r", encoding="utf-8", errors="ignore") as f:
+                words = [line.strip() for line in f if line.strip()]
+            print(f"\nWordlist carregada com ({len(words)} palavras)")
+            return words
+        except FileNotFoundError:
+            print(f"Ficheiro não encontrado: {filepath}")
+            return []
+        except Exception as e:
+            print(f"Erro: {e}")
+            return []
+
     def analyze_ecb_patterns(self) -> dict:
         """
         Analisa padrões no ciphertext que são característicos do modo ECB
@@ -317,10 +339,14 @@ def main():
     
     # 1. Análise de padrões ECB
     analyzer.analyze_ecb_patterns()
-    
-    # 2. Gerar wordlist
 
-    wordlist = analyzer.generate_wordlist()
+    # 2. Gerar wordlist ou utilizar uma wordlist conhecida
+    path=input("\nIndique o caminho para uma wordlist externa ( ou pressione Enter para utilizar uma gerada internamente): ").strip()
+
+    if path:
+        wordlist=analyzer.load_wordlist_from_file(path)
+    else:
+        wordlist = analyzer.generate_wordlist()
     
     # 3. Executar ataque
     results = analyzer.brute_force_attack(wordlist)
