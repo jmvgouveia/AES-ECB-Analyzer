@@ -1,10 +1,7 @@
-121# Protótipo principal
-
 #!/usr/bin/env python3
 """
 Protótipo de Análise de Mensagem Cifrada AES-ECB
 Desenvolvido para fins académicos - Mestrado em Criptografia
-
 """
 
 import base64
